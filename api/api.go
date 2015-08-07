@@ -10,9 +10,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/etsy/hound/config"
-	"github.com/etsy/hound/index"
-	"github.com/etsy/hound/searcher"
+	"github.com/danielcb/hound/config"
+	"github.com/danielcb/hound/index"
+	"github.com/danielcb/hound/searcher"
 )
 
 const (

@@ -26,7 +26,7 @@ You should be able to navigate to [http://localhost:6080/](http://localhost:6080
 1. Use the Go tools to install Hound. The binaries `houndd` (server) and `hound` (cli) will be installed in your $GOPATH.
 
     ```
-    go get github.com/etsy/hound/cmds/...
+    go get github.com/danielcb/hound/cmds/...
     ```
 
 2. Create a [config.json](config-example.json) in a directory with your list of repositories.
@@ -101,9 +101,9 @@ Currently the following editors have plugins that support Hound:
 Hound includes tools to make building locally easy. It is recommended that you use these tools if you are working on Hound. To get setup and build, just run the following commands:
 
 ```
-git clone https://github.com/etsy/hound.git hound/src/github.com/etsy/hound
+git clone https://github.com/danielcb/hound.git hound/src/github.com/etsy/hound
 cd hound
-src/github.com/etsy/hound/tools/setup
+src/github.com/danielcb/hound/tools/setup
 make
 ```
 
