@@ -27,8 +27,8 @@ func (g *NoneVcsDriver) Pull(dir string) (string, error) {
 func (g *NoneVcsDriver) Clone(dir, url string) (string, error) {
 	par, rep := filepath.Split(dir)
 	cmd := exec.Command(
-		"cp",
-		"-r",
+		"ln",
+		"-s",
 		url[7:],
 		rep)
 	cmd.Dir = par

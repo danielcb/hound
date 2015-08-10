@@ -304,6 +304,13 @@ func containsString(haystack []string, needle string) bool {
 }
 
 func indexAllFiles(opt *IndexOptions, dst, src string) error {
+	fileInfo, err := os.Lstat(src)
+	if err == nil {
+		if fileInfo.Mode()&os.ModeSymlink == os.ModeSymlink {
+			src, _ = os.Readlink(src)
+		}
+	}
+
 	ix := index.Create(filepath.Join(dst, "tri"))
 	defer ix.Close()
 

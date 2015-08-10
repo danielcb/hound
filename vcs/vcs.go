@@ -62,6 +62,12 @@ func New(name string, cfg []byte) (*WorkDir, error) {
 
 func exists(path string) bool {
 	if _, err := os.Stat(path); err != nil {
+		fileInfo, err := os.Lstat(path)
+		if err == nil {
+			if fileInfo.Mode()&os.ModeSymlink == os.ModeSymlink {
+				return true
+			}
+		}
 		return false
 	}
 	return true
