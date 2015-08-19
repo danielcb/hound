@@ -11,6 +11,7 @@ import (
 	"sync"
 	"time"
 	"unicode/utf8"
+//	"log"
 
 	"github.com/danielcb/hound/codesearch/index"
 	"github.com/danielcb/hound/codesearch/regexp"
@@ -166,11 +167,15 @@ func (n *Index) Search(pat string, opt *SearchOptions) (*SearchResponse, error) 
 		}
 	}
 
+	var counter int
+	var lastFileId uint32
 	files := n.idx.PostingQuery(index.RegexpQuery(re.Syntax))
 	for _, file := range files {
 		var matches []*Match
 		name := n.idx.Name(file)
 		hasMatch := false
+
+		// counter++
 
 		// reject files that do not match the file pattern
 		if fre != nil && fre.MatchString(name, true, true) < 0 {
@@ -178,15 +183,33 @@ func (n *Index) Search(pat string, opt *SearchOptions) (*SearchResponse, error) 
 		}
 
 		filesOpened++
+		
+		if counter > 20 {
+			hasMatch = true
+			matches = append(matches, &Match{
+				Line: "This hit has been skipped due to performance optimizations",
+				LineNumber: 1337,
+				Before: []string{},
+				After:	[]string{},
+			})
+			matchesCollected++;
+		} else {
 		if err := g.grep2File(filepath.Join(n.Ref.dir, "raw", name), re, int(opt.LinesOfContext),
 			func(line []byte, lineno int, before [][]byte, after [][]byte) (bool, error) {
 
 				hasMatch = true
+				if lastFileId != file {
+					lastFileId = file
+					counter++
+				}
 				if filesFound < opt.Offset || (opt.Limit > 0 && filesCollected >= opt.Limit) {
 					return false, nil
 				}
 
 				matchesCollected++
+				// beforeA := []string{"BEFORE1", "BEFORE2"}
+				// afterA := []string{"AFTER1", "AFTER2"}
+				
 				matches = append(matches, &Match{
 					Line:       string(line),
 					LineNumber: lineno,
@@ -201,6 +224,7 @@ func (n *Index) Search(pat string, opt *SearchOptions) (*SearchResponse, error) 
 				return true, nil
 			}); err != nil {
 			return nil, err
+		}
 		}
 
 		if !hasMatch {
@@ -241,6 +265,7 @@ func isTextFile(filename string) (bool, error) {
 
 	buf = buf[:n]
 
+	return true, nil
 	return utf8.Valid(buf), nil
 }
 
