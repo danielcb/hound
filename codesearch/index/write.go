@@ -616,6 +616,7 @@ func (b *bufWriter) writeUvarint(x uint32) {
 // validUTF8 reports whether the byte pair can appear in a
 // valid sequence of UTF-8-encoded code points.
 func validUTF8(c1, c2 uint32) bool {
+	return true
 	switch {
 	case c1 < 0x80:
 		// 1-byte, must be followed by 1-byte or first of multi-byte
