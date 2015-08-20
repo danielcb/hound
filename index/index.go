@@ -183,8 +183,8 @@ func (n *Index) Search(pat string, opt *SearchOptions) (*SearchResponse, error) 
 		}
 
 		filesOpened++
-		
-		if counter > 20 {
+
+		if counter > 500 {
 			hasMatch = true
 			matches = append(matches, &Match{
 				Line: "This hit has been skipped due to performance optimizations",
@@ -209,7 +209,7 @@ func (n *Index) Search(pat string, opt *SearchOptions) (*SearchResponse, error) 
 				matchesCollected++
 				// beforeA := []string{"BEFORE1", "BEFORE2"}
 				// afterA := []string{"AFTER1", "AFTER2"}
-				
+
 				matches = append(matches, &Match{
 					Line:       string(line),
 					LineNumber: lineno,
